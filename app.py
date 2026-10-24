@@ -124,7 +124,7 @@ with tab3:
 with tab4:
     from llm_client import generate_insights
 
-    st.subheader("🤖 Gemma AI Data Analyst")
+    st.subheader("🤖 Gemini AI Data Analyst")
     st.write("Generate explanations from the dataset's calculated statistics.")
 
     st.markdown("**Deterministic findings**")
@@ -138,7 +138,7 @@ with tab4:
                 insights = generate_insights(report)
                 st.markdown("### AI-generated insights")
                 st.write(insights)
-                st.success("Generated using the configured local model.")
+                st.success("Generated using Google Gemini API.")
             except Exception as exc:
                 st.error(
                     "Could not connect to Gemma. Make sure Ollama is installed, "
