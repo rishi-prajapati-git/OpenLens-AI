@@ -1,16 +1,22 @@
+import os
+from google import genai
 
-import ollama
 
-def generate_insights(analysis_report, model="gemma3:1b"):
-    """Generate evidence-based explanations using a local Gemma model."""
+def generate_insights(analysis_report):
+    """Generate evidence-based data insights using Google Gemini."""
+
+    api_key = os.getenv("GEMINI_API_KEY")
+
+    if not api_key:
+        raise ValueError("Gemini API key is missing.")
+
+    client = genai.Client(api_key=api_key)
 
     prompt = f"""
     You are OpenLens AI, a careful data analyst.
-
-    Analyze the following computed dataset statistics.
-    Explain the findings in simple language.
+    Analyze these dataset statistics in simple language.
     Do not invent values or claim causation.
-    If evidence is insufficient, clearly say so.
+    If evidence is insufficient, say so.
 
     Dataset analysis:
     {analysis_report}
@@ -21,14 +27,9 @@ def generate_insights(analysis_report, model="gemma3:1b"):
     3. Two actionable recommendations
     """
 
-    response = ollama.chat(
-        model=model,
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
+    response = client.models.generate_content(
+        model="gemini-3.5-flash-lite",
+        contents=prompt
     )
 
-    return response["message"]["content"]
+    return response.text
